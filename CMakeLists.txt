@@ -1,4 +1,3 @@
-
 # Create the extension library
 ADD_LIBRARY(Extensions_OpenGLESResources
   Resources/OpenGLES2Shader.h
