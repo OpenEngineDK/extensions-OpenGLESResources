@@ -38,12 +38,12 @@ public:
 
     GLint GetUniformLocation(string name);
 
-    void SetUniform(string name, int arg, bool force = false);
-    void SetUniform(string name, float value, bool force = false);
-    void SetUniform(string name, Vector<2, float> value, bool force = false);
-    void SetUniform(string name, Vector<3, float> value, bool force = false);
-    void SetUniform(string name, Vector<4, float> value, bool force = false);
-    void SetUniform(string name, Matrix<4, 4, float> value, bool force = false);
+    void SetUniform(string name, int arg);
+    void SetUniform(string name, float value);
+    void SetUniform(string name, Vector<2, float> value);
+    void SetUniform(string name, Vector<3, float> value);
+    void SetUniform(string name, Vector<4, float> value);
+    void SetUniform(string name, Matrix<4, 4, float> value);
     
     void GetUniform(string name, int &value);
     void GetUniform(string name, float &value);
@@ -52,31 +52,8 @@ public:
     void GetUniform(string name, Vector<4, float> &value);
     void GetUniform(string name, Matrix<4, 4, float> &value);
     
-    void SetTexture(string name, ITexture2DPtr tex, bool force = false);
-    void SetTexture(string name, ITexture3DPtr tex, bool force = false);
-
-    void GetTexture(string name, ITexture2DPtr &tex);
-    void GetTexture(string name, ITexture3DPtr &tex);
-
-    int GetUniformID(string name);
-
-    TextureList GetTextures();
-
-    void SetAttribute(string name, IDataBlockPtr values) { throw "error"; };
-    void SetAttribute(string name, Vector<3, float> value);
-
-    bool HasAttribute(string name) { throw "error"; }
-
-    void BindAttribute(int id, string name);
-
-    void VertexAttribute(int id, Vector<3,float> vec);
-    
     int GetAttributeID(const string name);
-
-    int GetShaderModel()  { throw "error"; }
-    bool HasVertexSupport()  { throw "error"; }
-    bool HasGeometrySupport()  { throw "error"; }
-    bool HasFragmentSupport()  { throw "error"; }
+    void BindAttribute(int id, string name);
 
     void Load();
     void Unload();

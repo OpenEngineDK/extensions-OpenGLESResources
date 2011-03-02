@@ -32,22 +32,22 @@ namespace Resources {
         return loc;
     }
     
-    void OpenGLES2Shader::SetUniform(string name, int value, bool force) { 
+    void OpenGLES2Shader::SetUniform(string name, int value) { 
         glUniform1i(GetUniformLocation(name), value);
     }
-    void OpenGLES2Shader::SetUniform(string name, float value, bool force) { 
+    void OpenGLES2Shader::SetUniform(string name, float value) { 
         glUniform1f(GetUniformLocation(name), value);
     }
-    void OpenGLES2Shader::SetUniform(string name, Vector<2, float> value, bool force ) { 
+    void OpenGLES2Shader::SetUniform(string name, Vector<2, float> value) { 
         glUniform2fv(GetUniformLocation(name), 2, value.ToArray());
     }
-    void OpenGLES2Shader::SetUniform(string name, Vector<3, float> value, bool force ) { 
+    void OpenGLES2Shader::SetUniform(string name, Vector<3, float> value) { 
         glUniform3fv(GetUniformLocation(name), 3, value.ToArray());
     }
-    void OpenGLES2Shader::SetUniform(string name, Vector<4, float> value, bool force ) { 
+    void OpenGLES2Shader::SetUniform(string name, Vector<4, float> value) { 
         glUniform4fv(GetUniformLocation(name), 4, value.ToArray());
     }
-    void OpenGLES2Shader::SetUniform(string name, Matrix<4, 4, float> value, bool force ) { 
+    void OpenGLES2Shader::SetUniform(string name, Matrix<4, 4, float> value) { 
         glUniformMatrix4fv(GetUniformLocation(name), 1, GL_FALSE, value.ToArray());
     }
     
@@ -59,25 +59,11 @@ namespace Resources {
     void OpenGLES2Shader::GetUniform(string name, Vector<3, float> &value) { THROW(); }
     void OpenGLES2Shader::GetUniform(string name, Vector<4, float> &value) { THROW(); }
     void OpenGLES2Shader::GetUniform(string name, Matrix<4, 4, float> &value) { THROW(); }
-    
-    void OpenGLES2Shader::SetTexture(string name, ITexture2DPtr tex, bool force ) { THROW(); }
-    void OpenGLES2Shader::SetTexture(string name, ITexture3DPtr tex, bool force ) { THROW(); }
-    
-    void OpenGLES2Shader::GetTexture(string name, ITexture2DPtr &tex) { THROW(); }
-    void OpenGLES2Shader::GetTexture(string name, ITexture3DPtr &tex) { THROW(); }
-    
-    int OpenGLES2Shader::GetUniformID(string name) { THROW(); }
-    
-    TextureList OpenGLES2Shader::GetTextures() { THROW(); }
-    
-    void OpenGLES2Shader::SetAttribute(string name, Vector<3, float> value) { THROW(); }
-    
+        
     void OpenGLES2Shader::BindAttribute(int idx, string name) { 
         logger.info << "Bind attributes!" << logger.end;
         glBindAttribLocation(programID, idx, name.c_str());
     }
-    
-    void OpenGLES2Shader::VertexAttribute(int id, Vector<3,float> vec) { THROW(); }
     
     GLint OpenGLES2Shader::GetAttributeID(const string name) { 
         const char *str = name.c_str();
@@ -101,7 +87,6 @@ namespace Resources {
         if (!linked) {
             logger.error << "Failed to link program" << logger.end;
         }
-        
     }
     
     GLuint OpenGLES2Shader::LoadShader(string file, GLenum type) {
