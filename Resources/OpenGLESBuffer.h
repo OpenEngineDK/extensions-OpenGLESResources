@@ -27,7 +27,7 @@ namespace OpenEngine {
         public:
             OpenGLESBuffer() 
                 : size(0), data(NULL) {}
-            OpenGLESBuffer(unsigned int size, T* data) 
+            OpenGLESBuffer(unsigned int size, T* data)
                 : size(size), data(data) {}
 
             virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
