@@ -21,7 +21,8 @@ namespace OpenEngine {
         public:
             Buffer() {}
 
-            virtual Buffer<N, T>* Clone() { throw Core::NotImplemented(); }
+            //virtual Buffer<N, T>* Clone() { throw Core::NotImplemented(); }
+            virtual IBuffer* Clone() { throw Core::NotImplemented(); }
             virtual Types::Type GetType() { throw Core::NotImplemented(); }
             virtual unsigned int GetDimension() { throw Core::NotImplemented(); }
             virtual unsigned int GetSize() { throw Core::NotImplemented(); }

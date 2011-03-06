@@ -11,15 +11,13 @@ namespace Resources {
 
     using namespace std;
     
-    OpenGLES2Shader::OpenGLES2Shader(string vertex, string fragment) 
-        : vertexShader(vertex), fragmentShader(fragment) {
-        
-    }
+    OpenGLES2Shader::OpenGLES2Shader(string &vertex, string &fragment) 
+        : vertexShader(vertex), fragmentShader(fragment) {}
     
     void OpenGLES2Shader::ApplyShader() {
         glUseProgram(programID);
     }
-    void OpenGLES2Shader::ReleaseShader() { 
+    void OpenGLES2Shader::ReleaseShader() {
         glUseProgram(0);
     }
 

@@ -24,14 +24,14 @@ namespace Resources {
  */
 class OpenGLES2Shader /* : public IShaderResource*/ {
 private:
-    string vertexShader, fragmentShader;
+    string &vertexShader, &fragmentShader;
     
     GLuint LoadShader(string file, GLenum type);
     GLuint programID;
     
     
 public:
-    OpenGLES2Shader(string vertex, string fragment);
+    OpenGLES2Shader(string &vertex, string &fragment);
     
     void ApplyShader();
     void ReleaseShader();

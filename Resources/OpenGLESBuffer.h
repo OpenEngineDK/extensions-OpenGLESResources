@@ -30,7 +30,8 @@ namespace OpenEngine {
             OpenGLESBuffer(unsigned int size, T* data)
                 : size(size), data(data) {}
 
-            virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
+            //virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
+            virtual IBuffer* Clone() { throw Core::NotImplemented(); }
 
             virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
             virtual unsigned int GetDimension() { return N; }
@@ -41,8 +42,10 @@ namespace OpenEngine {
             virtual void UnmapData() { }
             virtual std::string ToString() { throw Core::NotImplemented(); }
 
-            void Apply(GLint loc) { throw Core::NotImplemented(); }
-            void Release() { throw Core::NotImplemented(); }
+            void Apply(GLint loc) { 
+                glVertexAttribPointer(loc, N, Types::GetResourceType<T>(), GL_FALSE, 0, data);
+            }
+            void Release() { }
         };
 
     }

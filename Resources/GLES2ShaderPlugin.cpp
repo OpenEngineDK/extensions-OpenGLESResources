@@ -56,8 +56,8 @@ namespace Resources {
         fragShader = string(fragShdr);
 
         // Create Shader
-
         OpenGLES2ShaderPtr shader = OpenGLES2ShaderPtr(new OpenGLES2Shader(vertexShader, fragShader));
+        throw "The shader implementation strings disappear after this and cannot be found again. Create a proper resource manager.";
 
         // TODO Set uniforms defined in file as constants
 

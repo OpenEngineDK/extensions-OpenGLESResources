@@ -10,12 +10,13 @@
 #ifndef _I_OPENGL_ES_BUFFER_H_
 #define _I_OPENGL_ES_BUFFER_H_
 
+#include <Resources/IBuffer.h>
 #include <Meta/OpenGLES2.h>
 
 namespace OpenEngine {
     namespace Resources {
 
-        class IOpenGLESBuffer /*: public IDataBlock */ {
+        class IOpenGLESBuffer : public IBuffer {
         public:
             virtual void Apply(GLint loc) = 0;
             virtual void Release() = 0;
