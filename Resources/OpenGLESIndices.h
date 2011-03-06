@@ -38,6 +38,7 @@ namespace OpenEngine {
             
             void Draw(GLenum mode) {
                 glDrawElements(mode, this->size, Types::GetResourceType<T>(), this->data);
+                CHECK_FOR_GLES2_ERROR();
             }
         };
 

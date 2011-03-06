@@ -17,7 +17,7 @@ namespace OpenEngine {
     namespace Resources {
 
         template <int N, class T>
-        class Buffer : public IBuffer {
+        class Buffer : public virtual IBuffer {
         public:
             Buffer() {}
 

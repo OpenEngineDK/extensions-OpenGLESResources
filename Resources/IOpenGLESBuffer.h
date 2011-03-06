@@ -16,7 +16,7 @@
 namespace OpenEngine {
     namespace Resources {
 
-        class IOpenGLESBuffer : public IBuffer {
+        class IOpenGLESBuffer : public virtual IBuffer {
         public:
             virtual void Apply(GLint loc) = 0;
             virtual void Release() = 0;

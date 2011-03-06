@@ -15,7 +15,7 @@
 namespace OpenEngine {
     namespace Resources {
 
-        class IIndices : public IBuffer {
+        class IIndices : public virtual IBuffer {
         public:
             virtual unsigned int GetIndex(unsigned int i) = 0;
         };

@@ -13,6 +13,8 @@
 #include <Resources/IOpenGLESBuffer.h>
 #include <Resources/Buffer.h>
 
+#include <Resources/IDataBlock.h>
+
 namespace OpenEngine {
     namespace Resources {
 
@@ -29,6 +31,16 @@ namespace OpenEngine {
                 : size(0), data(NULL) {}
             OpenGLESBuffer(unsigned int size, T* data)
                 : size(size), data(data) {}
+            OpenGLESBuffer(IDataBlockPtr hat){
+                size = hat->GetSize();
+#ifdef OE_SAFE
+                if (hat->GetDimension() != N || 
+                    hat->GetType() != GetType())
+                    throw Exception("IDataBlockPtr does not match OpenGLESBuffer template args.");
+#endif
+                data = new T[size];
+                memcpy(data, hat->GetVoidData(), sizeof(T) * size);
+            }
 
             //virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
             virtual IBuffer* Clone() { throw Core::NotImplemented(); }
@@ -44,6 +56,7 @@ namespace OpenEngine {
 
             void Apply(GLint loc) { 
                 glVertexAttribPointer(loc, N, Types::GetResourceType<T>(), GL_FALSE, 0, data);
+                CHECK_FOR_GLES2_ERROR();
             }
             void Release() { }
         };

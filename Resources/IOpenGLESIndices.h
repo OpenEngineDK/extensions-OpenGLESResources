@@ -16,7 +16,7 @@
 namespace OpenEngine {
     namespace Resources {
 
-        class IOpenGLESIndices : public IIndices {
+        class IOpenGLESIndices : public virtual IIndices {
         public:
             virtual void Draw(GLenum mode) = 0;
         };
