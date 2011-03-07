@@ -20,7 +20,7 @@ namespace OpenEngine {
 
         template <int N, class T>
         class OpenGLESBuffer : public Buffer<N,T>,
-                               public IOpenGLESBuffer {
+                               public virtual IOpenGLESBuffer {
         protected:
             //GLint id;
             unsigned int size;
@@ -38,8 +38,8 @@ namespace OpenEngine {
                     hat->GetType() != GetType())
                     throw Exception("IDataBlockPtr does not match OpenGLESBuffer template args.");
 #endif
-                data = new T[size];
-                memcpy(data, hat->GetVoidData(), sizeof(T) * size);
+                data = new T[size * N];
+                memcpy(data, hat->GetVoidData(), sizeof(T) * N * size);
             }
 
             //virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
@@ -52,7 +52,22 @@ namespace OpenEngine {
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
             virtual void* MapData(IBuffer::AccessType access) { return data; }
             virtual void UnmapData() { }
-            virtual std::string ToString() { throw Core::NotImplemented(); }
+            virtual std::string ToString() { 
+                std::ostringstream out;
+                out << "size: " << size << ", dimension: " << N << ", type: " << Types::GetResourceType<T>() << "\n";
+                T* data = (T*)MapData(READ_ONLY);
+                out << "[";
+                for (unsigned int i = 0; i < size; ++i){
+                    if (i % N == 0) out << "(";
+                    out << data[i];
+                    if (i % N == N-1) out << ")";
+                    if (i+1<size) out << ", ";
+                }
+                out << "]";
+                UnmapData();
+
+                return out.str();
+            }
 
             void Apply(GLint loc) { 
                 glVertexAttribPointer(loc, N, Types::GetResourceType<T>(), GL_FALSE, 0, data);
