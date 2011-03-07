@@ -1,6 +1,6 @@
 // Mesh.
 // -------------------------------------------------------------------
-// Copyright (C) 2010 OpenEngine.dk (See AUTHORS) 
+// Copyright (C) 2011 OpenEngine.dk (See AUTHORS) 
 // 
 // This program is free software; It is covered by the GNU General 
 // Public License version 2 or any later version. 
@@ -15,7 +15,7 @@
 namespace OpenEngine {
     namespace Geometry {
         NewMesh::NewMesh(NewGeometrySet* geom,
-                         Material* mat,
+                         MaterialPtr mat,
                          Resources::IIndices* indices,
                          GeometricType type)
             : geom(geom), mat(mat), indices(indices), type(type) {}

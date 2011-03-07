@@ -13,6 +13,8 @@
 #include <Resources/IOpenGLESIndices.h>
 #include <Resources/NewIndices.h>
 
+#include <typeinfo>
+
 namespace OpenEngine {
     namespace Resources {
 
@@ -20,7 +22,27 @@ namespace OpenEngine {
         class OpenGLESIndices : public NewIndices<T>,
                                 public IOpenGLESIndices {
         public:
-            OpenGLESIndices() {}
+            OpenGLESIndices() : NewIndices<T>() {}
+
+            template <class S>
+            OpenGLESIndices(unsigned int size, S* data) 
+                : NewIndices<T>() {
+                this->size = size;
+                this->data = new T[size];
+                if (typeid(T) == typeid(S)){
+                    // Same type, simple copy
+                    memcpy(this->data, data, sizeof(T) * size);
+                }else{
+                    // Other type, must convert every element
+                    for (unsigned int i = 0; i < size; ++i)
+                        this->data[i] = data[i];
+                }
+            }
+            
+            virtual ~OpenGLESIndices() {
+                if (this->data) delete this->data;
+                this->data = NULL;
+            }
 
             virtual OpenGLESIndices<T>* Clone() { throw Core::NotImplemented(); }
 

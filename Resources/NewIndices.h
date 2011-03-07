@@ -22,7 +22,11 @@ namespace OpenEngine {
             unsigned int size;
             T* data;
         public:
-            NewIndices() {}
+            NewIndices() : size(0), data(NULL) {}
+            virtual ~NewIndices(){
+                if (this->data) delete this->data;
+                this->data = NULL;
+            }
             
             virtual NewIndices<T>* Clone() { throw Core::NotImplemented(); }
             virtual Types::Type GetType() { return Types::GetResourceType<T>(); }

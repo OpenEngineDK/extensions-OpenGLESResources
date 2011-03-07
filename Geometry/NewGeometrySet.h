@@ -32,7 +32,8 @@ namespace OpenEngine {
             unsigned int size;
             AttributeLists attrs;
         public:
-            NewGeometrySet() : size(0)  {}
+            NewGeometrySet() : size(0) {}
+            NewGeometrySet(std::map<std::string, Resources::IBuffer*> attrs);
 
             /**
              * Clones the data in the geometry set.
@@ -53,6 +54,14 @@ namespace OpenEngine {
                 AttributeLists::const_iterator itr = attrs.find(name);
                 if (itr == attrs.end()) return NULL;
                 return itr->second;
+            }
+
+            AttributeLists::iterator Begin() {
+                return attrs.begin();
+            }
+
+            AttributeLists::iterator End() {
+                return attrs.end();
             }
 
             /**
