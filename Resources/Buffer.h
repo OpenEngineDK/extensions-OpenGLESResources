@@ -18,18 +18,37 @@ namespace OpenEngine {
 
         template <int N, class T>
         class Buffer : public virtual IBuffer {
-        public:
-            Buffer() {}
+        protected:
+            unsigned int size;
+            T* data;
 
-            //virtual Buffer<N, T>* Clone() { throw Core::NotImplemented(); }
-            virtual IBuffer* Clone() { throw Core::NotImplemented(); }
+        public:
+            Buffer() : size(0), data(NULL) {}
+            Buffer(unsigned int size, T* data) : size(size), data(data) {}
+
+            virtual Buffer<N, T>* Clone() { throw Core::NotImplemented(); }
             virtual Types::Type GetType() { throw Core::NotImplemented(); }
             virtual unsigned int GetDimension() { throw Core::NotImplemented(); }
             virtual unsigned int GetSize() { throw Core::NotImplemented(); }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
             virtual void* MapData(IBuffer::AccessType access) { throw Core::NotImplemented(); }
             virtual void UnmapData() { throw Core::NotImplemented(); }
-            virtual std::string ToString() { throw Core::NotImplemented(); }
+            virtual std::string ToString() { 
+                std::ostringstream out;
+                out << "size: " << size << ", dimension: " << N << ", type: " << Types::GetResourceType<T>() << "\n";
+                T* data = (T*)MapData(READ_ONLY);
+                out << "[";
+                for (unsigned int i = 0; i < size; ++i){
+                    if (i % N == 0) out << "(";
+                    out << data[i];
+                    if (i % N == N-1) out << ")";
+                    if (i+1<size) out << ", ";
+                }
+                out << "]";
+                UnmapData();
+
+                return out.str();
+            }
         };
 
     }

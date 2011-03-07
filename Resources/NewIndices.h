@@ -17,20 +17,35 @@ namespace OpenEngine {
     namespace Resources {
         
         template<class T>
-        class NewIndices : public IIndices {
+        class NewIndices : public virtual IIndices {
+        protected:
+            unsigned int size;
+            T* data;
+        public:
             NewIndices() {}
             
             virtual NewIndices<T>* Clone() { throw Core::NotImplemented(); }
-            virtual Types::Type GetType() { throw Core::NotImplemented(); }
-            virtual unsigned int GetDimension() { throw Core::NotImplemented(); }
-            virtual unsigned int GetSize() { throw Core::NotImplemented(); }
+            virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
+            virtual unsigned int GetDimension() { return 1; }
+            virtual unsigned int GetSize() { return size; }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
 
-            virtual unsigned int GetIndex(unsigned int i) { throw Core::NotImplemented(); }
-            virtual void* MapData(IBuffer::AccessType access) { throw Core::NotImplemented(); }
-            virtual void UnmapData() { throw Core::NotImplemented(); }
+            virtual unsigned int GetIndex(unsigned int i) { return (unsigned int)data[i]; }
+            virtual void* MapData(IBuffer::AccessType access) { return data; }
+            virtual void UnmapData() { }
 
-            virtual std::string ToString() { throw Core::NotImplemented(); }
+            virtual std::string ToString() { 
+                std::ostringstream out;
+                out << size << " indices of type " << Types::GetResourceType<T>() << ".\n";
+                out << "[";
+                for (unsigned int i = 0; i < size; ++i){
+                    out << data[i];
+                    if (i+1<size) out << ", ";
+                }
+                out << "]";
+
+                return out.str();
+            }
 
         };
 

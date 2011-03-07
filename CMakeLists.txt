@@ -15,6 +15,9 @@ ADD_LIBRARY(Extensions_OpenGLESResources
   Resources/GLES2ShaderPlugin.cpp
 
 # New Engine classes
+  Geometry/NewGeometrySet.h
+  Geometry/NewMesh.h
+  Geometry/NewMesh.cpp
   Scene/NewMeshNode.h
   Scene/NewMeshNode.cpp
 )

@@ -11,19 +11,18 @@
 #define _OPENGL_ES_INDICES_H_
 
 #include <Resources/IOpenGLESIndices.h>
-#include <Resources/OpenGLESBuffer.h>
+#include <Resources/NewIndices.h>
 
 namespace OpenEngine {
     namespace Resources {
 
         template <class T>
-        class OpenGLESIndices : public OpenGLESBuffer<1, T>,
+        class OpenGLESIndices : public NewIndices<T>,
                                 public IOpenGLESIndices {
         public:
             OpenGLESIndices() {}
 
-            //virtual OpenGLESIndices<T>* Clone() { throw Core::NotImplemented(); }
-            virtual IBuffer* Clone() { throw Core::NotImplemented(); }
+            virtual OpenGLESIndices<T>* Clone() { throw Core::NotImplemented(); }
 
             virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
             virtual unsigned int GetDimension() { return 1; }
@@ -32,7 +31,12 @@ namespace OpenEngine {
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
             virtual void* MapData(IBuffer::AccessType access) { return this->data; }
             virtual void UnmapData() { }
-            virtual std::string ToString() { throw Core::NotImplemented(); }
+            virtual std::string ToString() { 
+                this->data = (T*)MapData(READ_ONLY);
+                std::string str = NewIndices<T>::ToString();
+                UnmapData();
+                return str;
+            }
 
             unsigned int GetIndex(unsigned int i) { return (unsigned int)this->data[i]; }
             
