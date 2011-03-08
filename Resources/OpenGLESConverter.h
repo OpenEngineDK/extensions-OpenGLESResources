@@ -35,9 +35,9 @@ namespace OpenEngine {
 
             void VisitMeshNode(Scene::MeshNode *node);
             
-            template<int N, class T>
-            IBuffer* CreateBuffer(unsigned int size, T* data){
-                return new OpenGLESBuffer<N, T>(size, data);
+            template<class T>
+            IBuffer* CreateBuffer(int dim, unsigned int size, T* data){
+                return new OpenGLESBuffer<T>(dim, size, data);
             }
 
             template<class T>

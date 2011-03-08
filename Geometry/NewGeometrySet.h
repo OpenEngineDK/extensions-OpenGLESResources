@@ -67,7 +67,7 @@ namespace OpenEngine {
             /**
              * Get vertices.
              */
-            inline Resources::Buffer<3, float>* GetVertices() const { return NULL; }
+            //inline Resources::Buffer<float>* GetVertices() const { return NULL; }
 
         };
     }

@@ -64,38 +64,16 @@ namespace Resources {
     }
         
     IBuffer* OpenGLESConverter::ConvertToESBuffer(IDataBlockPtr data){
-        switch(data->GetDimension()){
-        case 1:
-            switch(data->GetType()){
-            case Types::UINT:
-                return new OpenGLESBuffer<1, unsigned int>(data);
-            case Types::INT:
-                return new OpenGLESBuffer<1, int>(data);
-            case Types::FLOAT:
-                return new OpenGLESBuffer<1, float>(data);
-            default:
-                throw Core::NotImplemented("Unsupported Data Block configuration");
-            }
-        case 2:
-            switch(data->GetType()){
-            case Types::FLOAT:
-                return new OpenGLESBuffer<2, float>(data);
-            default:
-                throw Core::NotImplemented("Unsupported Data Block configuration");
-            }
-        case 3:
-            switch(data->GetType()){
-            case Types::FLOAT:
-                return new OpenGLESBuffer<3, float>(data);
-            default:
-                throw Core::NotImplemented("Unsupported Data Block configuration");
-            }
-
+        switch(data->GetType()){
+        case Types::UINT:
+            return new OpenGLESBuffer<unsigned int>(data);
+        case Types::INT:
+            return new OpenGLESBuffer<int>(data);
+        case Types::FLOAT:
+            return new OpenGLESBuffer<float>(data);
         default:
             throw Core::NotImplemented("Unsupported Data Block configuration");
         }
-
-        // @TODO also move listeners from one resource to another.
         
         throw Core::NotImplemented("Unsupported Data Block configuration");
     }

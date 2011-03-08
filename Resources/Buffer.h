@@ -16,32 +16,33 @@
 namespace OpenEngine {
     namespace Resources {
 
-        template <int N, class T>
+        template <class T>
         class Buffer : public virtual IBuffer {
         protected:
+            int dim;
             unsigned int size;
             T* data;
 
         public:
-            Buffer() : size(0), data(NULL) {}
-            Buffer(unsigned int size, T* data) : size(size), data(data) {}
+            Buffer() : dim(0), size(0), data(NULL) {}
+            Buffer(int dim, unsigned int size, T* data) : dim(dim), size(size), data(data) {}
 
-            virtual Buffer<N, T>* Clone() { throw Core::NotImplemented(); }
-            virtual Types::Type GetType() { throw Core::NotImplemented(); }
-            virtual unsigned int GetDimension() { throw Core::NotImplemented(); }
-            virtual unsigned int GetSize() { throw Core::NotImplemented(); }
+            virtual Buffer<T>* Clone() { throw Core::NotImplemented(); }
+            virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
+            virtual unsigned int GetDimension() { return dim; }
+            virtual unsigned int GetSize() { return size; }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
-            virtual void* MapData(IBuffer::AccessType access) { throw Core::NotImplemented(); }
-            virtual void UnmapData() { throw Core::NotImplemented(); }
+            virtual void* MapData(IBuffer::AccessType access) { return data; }
+            virtual void UnmapData() { }
             virtual std::string ToString() { 
                 std::ostringstream out;
-                out << "size: " << size << ", dimension: " << N << ", type: " << Types::GetResourceType<T>() << "\n";
+                out << "size: " << size << ", dimension: " << dim << ", type: " << Types::GetResourceType<T>() << "\n";
                 T* data = (T*)MapData(READ_ONLY);
                 out << "[";
                 for (unsigned int i = 0; i < size; ++i){
-                    if (i % N == 0) out << "(";
+                    if (i % dim == 0) out << "(";
                     out << data[i];
-                    if (i % N == N-1) out << ")";
+                    if (i % (unsigned int)dim == (unsigned int)dim-1) out << ")";
                     if (i+1<size) out << ", ";
                 }
                 out << "]";

@@ -18,41 +18,41 @@
 namespace OpenEngine {
     namespace Resources {
 
-        template <int N, class T>
-        class OpenGLESBuffer : public Buffer<N,T>,
+        template <class T>
+        class OpenGLESBuffer : public Buffer<T>,
                                public virtual IOpenGLESBuffer {
         protected:
             //GLint id;
 
         public:
             OpenGLESBuffer() 
-                : Buffer<N, T>() {}
-            OpenGLESBuffer(unsigned int size, T* data)
-                : Buffer<N, T>(size, data) {}
+                : Buffer<T>() {}
+            OpenGLESBuffer(int dim, unsigned int size, T* data)
+                : Buffer<T>(dim, size, data) {}
             OpenGLESBuffer(IDataBlockPtr hat){
                 this->size = hat->GetSize();
+                this->dim = hat->GetDimension();
 #ifdef OE_SAFE
-                if (hat->GetDimension() != N || 
-                    hat->GetType() != GetType())
+                if (hat->GetType() != GetType())
                     throw Exception("IDataBlockPtr does not match OpenGLESBuffer template args.");
 #endif
-                this->data = new T[this->size * N];
-                memcpy(this->data, hat->GetVoidData(), sizeof(T) * N * this->size);
+                this->data = new T[this->size * this->dim];
+                memcpy(this->data, hat->GetVoidData(), sizeof(T) * this->dim * this->size);
             }
 
-            virtual OpenGLESBuffer<N,T>* Clone() { throw Core::NotImplemented(); }
+            virtual OpenGLESBuffer<T>* Clone() { throw Core::NotImplemented(); }
 
             virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
-            virtual unsigned int GetDimension() { return N; }
+            virtual unsigned int GetDimension() { return this->dim; }
 
             virtual unsigned int GetSize() { return this->size; }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
             virtual void* MapData(IBuffer::AccessType access) { return this->data; }
             virtual void UnmapData() { }
-            virtual std::string ToString() { return Buffer<N, T>::ToString(); }
+            virtual std::string ToString() { return Buffer<T>::ToString(); }
 
             void Apply(GLint loc) { 
-                glVertexAttribPointer(loc, N, Types::GetResourceType<T>(), GL_FALSE, 0, this->data);
+                glVertexAttribPointer(loc, this->dim, Types::GetResourceType<T>(), GL_FALSE, 0, this->data);
                 CHECK_FOR_GLES2_ERROR();
             }
             void Release() { }
