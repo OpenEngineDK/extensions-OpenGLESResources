@@ -25,7 +25,13 @@ namespace OpenEngine {
 
         public:
             Buffer() : dim(0), size(0), data(NULL) {}
-            Buffer(int dim, unsigned int size, T* data) : dim(dim), size(size), data(data) {}
+            Buffer(int dim, unsigned int size, T* data) : dim(dim), size(size) {
+                if (data)
+                    memcpy(this->data, data, dim * size * sizeof(T));
+            }
+            virtual ~Buffer(){
+                if (data) delete data;
+            }
 
             virtual Buffer<T>* Clone() { throw Core::NotImplemented(); }
             virtual Types::Type GetType() { return Types::GetResourceType<T>(); }
