@@ -26,8 +26,11 @@ namespace OpenEngine {
         public:
             Buffer() : dim(0), size(0), data(NULL) {}
             Buffer(int dim, unsigned int size, T* data) : dim(dim), size(size) {
-                if (data)
+                if (data){
+                    this->data = new T[dim * size];
                     memcpy(this->data, data, dim * size * sizeof(T));
+                }else
+                    this->data = NULL;
             }
             virtual ~Buffer(){
                 if (data) delete data;

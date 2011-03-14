@@ -59,8 +59,6 @@ namespace Resources {
         }
         
         meshNode->Accept(*this);
-        
-        //node->VisitSubNodes(*this);
     }
         
     IBuffer* OpenGLESConverter::ConvertToESBuffer(IDataBlockPtr data){

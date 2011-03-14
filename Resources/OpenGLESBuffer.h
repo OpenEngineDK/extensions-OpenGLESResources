@@ -13,8 +13,6 @@
 #include <Resources/IOpenGLESBuffer.h>
 #include <Resources/Buffer.h>
 
-#include <Resources/IDataBlock.h>
-
 namespace OpenEngine {
     namespace Resources {
 
@@ -42,7 +40,7 @@ namespace OpenEngine {
             virtual unsigned int GetSize() { return this->size; }
             virtual void Resize(unsigned int size) { 
                 if (this->data == NULL)
-                    throw Core::Exception("Can not resize an OpenGL ES Buffer that is write only");
+                    throw Core::Exception("Cannot resize an OpenGL ES Buffer that is write only");
                 else
                     throw Core::NotImplemented();
             }
@@ -53,7 +51,7 @@ namespace OpenEngine {
 
                 // Else we should work on the GPU data, but that is write only                
                 if (access == READ_ONLY || access == READ_WRITE)
-                    throw Core::Exception("Buffer was created with WRITE_ONLY access type and can not be read from.");
+                    throw Core::Exception("Buffer was created with WRITE_ONLY access type and cannot be read from.");
 
                 glBindBuffer(GL_ARRAY_BUFFER, bufferId);
                 // @TODO glMapBufferOES is slow if the entire buffer is updated.
@@ -68,9 +66,9 @@ namespace OpenEngine {
             virtual std::string ToString() { return Buffer<T>::ToString(); }
 
             void Apply(GLint loc) { 
-                if (this->data)
+                if (this->data){
                     glVertexAttribPointer(loc, this->dim, Types::GetResourceType<T>(), GL_FALSE, 0, this->data);
-                else{
+                }else{
                     glBindBuffer(GL_ARRAY_BUFFER, bufferId);
                     glVertexAttribPointer(loc, this->dim, Types::GetResourceType<T>(), GL_FALSE, 0, 0);
                 }
