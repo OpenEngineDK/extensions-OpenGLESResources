@@ -12,6 +12,7 @@
 
 #include <Resources/IBuffer.h>
 #include <Core/Exceptions.h>
+#include <Utils/Convert.h>
 
 namespace OpenEngine {
     namespace Resources {
@@ -41,7 +42,16 @@ namespace OpenEngine {
             virtual unsigned int GetDimension() { return dim; }
             virtual unsigned int GetSize() { return size; }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
-            virtual void* MapData(IBuffer::AccessType access) { return data; }
+
+            virtual void UpdateData(void* data, unsigned int offset = 0, unsigned int elements = 0) { 
+                elements = elements == 0 ? size - offset : elements;
+#if OE_SAFE
+                if (offset + elements > size)
+                    throw Core::Exception("Cannot update buffer of size " + Utils::Convert::ToString(size) + " with " + Utils::Convert::ToString(elements) + " elements at offset " + Utils::Convert::ToString(offset) + ".");
+#endif
+                memcpy(this->data + offset, data, sizeof(T) * elements);
+            }
+            virtual void* MapData(IBuffer::AccessType access, unsigned int offset = 0, unsigned int elements = 0) { return data + offset; }
             virtual void UnmapData() { }
             virtual std::string ToString() { 
                 std::ostringstream out;

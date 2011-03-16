@@ -29,7 +29,8 @@ namespace OpenEngine {
             virtual unsigned int GetDimension() = 0;
             virtual unsigned int GetSize() = 0;
             virtual void Resize(unsigned int size) = 0;
-            virtual void* MapData(AccessType access) = 0;
+            virtual void UpdateData(void* data, unsigned int offset = 0, unsigned int elements = 0) = 0;
+            virtual void* MapData(AccessType access, unsigned int offset = 0, unsigned int elements = 0) = 0;
             virtual void UnmapData() = 0;
             virtual std::string ToString() = 0;
         };

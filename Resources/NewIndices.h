@@ -34,8 +34,9 @@ namespace OpenEngine {
             virtual unsigned int GetSize() { return size; }
             virtual void Resize(unsigned int size) { throw Core::NotImplemented(); }
 
+            virtual void UpdateData(void* data, unsigned int offset = 0, unsigned int elements = 0) { throw Core::NotImplemented(); }
             virtual unsigned int GetIndex(unsigned int i) { return (unsigned int)data[i]; }
-            virtual void* MapData(IBuffer::AccessType access) { return data; }
+            virtual void* MapData(IBuffer::AccessType access, unsigned int offset = 0, unsigned int elements = 0) { return data; }
             virtual void UnmapData() { }
 
             virtual std::string ToString() { 

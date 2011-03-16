@@ -29,7 +29,15 @@ namespace OpenEngine {
             OpenGLESBuffer(int dim, unsigned int size, T* data, IBuffer::AccessType access = WRITE_ONLY)
                 : Buffer<T>(dim, size, access != WRITE_ONLY ? data : NULL) {
                 if (this->data == NULL)
-                    BindBuffer(dim, size, data);
+                    bufferId = CreateBuffer(dim, size, data);
+            }
+
+            virtual ~OpenGLESBuffer() {
+                // If the buffer has been allocated on the GPU then delete it.
+                if (bufferId){
+                    glDeleteBuffers(1, &bufferId);
+                    bufferId = 0;
+                }
             }
 
             virtual OpenGLESBuffer<T>* Clone() { throw Core::NotImplemented(); }
@@ -45,9 +53,25 @@ namespace OpenEngine {
                     throw Core::NotImplemented();
             }
             
-            virtual void* MapData(IBuffer::AccessType access) {
+            virtual void UpdateData(void* data, unsigned int offset = 0, unsigned int elements = 0) {
+                elements = elements == 0 ? this->size - offset : elements;
+#if OE_SAFE
+                if (offset + elements > this->size)
+                    throw Core::Exception("Cannot update ES buffer of size " + 
+                                          Utils::Convert::ToString(this->size) + " with " + 
+                                          Utils::Convert::ToString(elements) + 
+                                          " elements at offset " + 
+                                          Utils::Convert::ToString(offset) + ".");
+#endif
+
+                glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+                glBufferSubData(GL_ARRAY_BUFFER, offset * this->dim * sizeof(T), elements * this->dim * sizeof(T), data);
+                CHECK_FOR_GLES2_ERROR();
+            }
+            
+            virtual void* MapData(IBuffer::AccessType access, unsigned int offset = 0, unsigned int elements = 0) {
                 // If data isn't null then work directly on CPU data.
-                if (this->data) return this->data;
+                if (this->data) return this->data + offset;
 
                 // Else we should work on the GPU data, but that is write only                
                 if (access == READ_ONLY || access == READ_WRITE)
@@ -55,12 +79,16 @@ namespace OpenEngine {
 
                 glBindBuffer(GL_ARRAY_BUFFER, bufferId);
                 // @TODO glMapBufferOES is slow if the entire buffer is updated.
-                return glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
+                T* ret = (T*)glMapBufferOES(GL_ARRAY_BUFFER, GL_WRITE_ONLY_OES);
+                CHECK_FOR_GLES2_ERROR();
+                return ret + offset;
             }
             virtual void UnmapData() { 
                 // If data is located at the GPU then unbind it
-                if (this->data == NULL)
+                if (this->data == NULL){
                     glUnmapBufferOES(GL_ARRAY_BUFFER);
+                    CHECK_FOR_GLES2_ERROR();
+                }
             }
             
             virtual std::string ToString() { return Buffer<T>::ToString(); }
@@ -76,18 +104,6 @@ namespace OpenEngine {
             }
             
             void Release() { }
-
-            void BindBuffer(int dim, unsigned int size, T* data){
-                glGenBuffers(1, &bufferId);
-                glBindBuffer(GL_ARRAY_BUFFER, bufferId);
-                CHECK_FOR_GLES2_ERROR();
-
-                GLsizeiptr glSize = sizeof(T) * dim * size;
-                glBufferData(GL_ARRAY_BUFFER, glSize, data, GL_STATIC_DRAW);
-                CHECK_FOR_GLES2_ERROR();
-
-                glBindBuffer(GL_ARRAY_BUFFER, 0);                
-            }
         };
 
     }

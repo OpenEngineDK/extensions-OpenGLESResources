@@ -20,6 +20,23 @@ namespace OpenEngine {
         public:
             virtual void Apply(GLint loc) = 0;
             virtual void Release() = 0;
+
+            template <class T>
+            static inline GLuint CreateBuffer(int dim, unsigned int size, T* data){
+                GLuint bufferId;
+                glGenBuffers(1, &bufferId);
+                glBindBuffer(GL_ARRAY_BUFFER, bufferId);
+                CHECK_FOR_GLES2_ERROR();
+
+                GLsizeiptr glSize = sizeof(T) * dim * size;
+                glBufferData(GL_ARRAY_BUFFER, glSize, data, GL_STATIC_DRAW);
+                CHECK_FOR_GLES2_ERROR();
+
+                glBindBuffer(GL_ARRAY_BUFFER, 0);                
+                CHECK_FOR_GLES2_ERROR();
+                
+                return bufferId;
+            }
         };
 
     }
